@@ -28,15 +28,6 @@ private:
   }
   
 public:
-  void	addUser(User &user)
-  {
-    for (const auto &u : _userList)
-      if (u->getUserName() == user.getUserName())
-	break;
-    _userList.push_back(&user);
-    this->notify();
-  }
-
   User(std::string &&userName): _userName(userName)
   {
     _message = "";
@@ -46,7 +37,16 @@ public:
   const std::string &getMessage() { return _message;}
   const std::string &getUserName(){ return _userName;}
   const std::string &getIp(){ return _ip;}
-  
+
+  void	addUser(User &user)
+  {
+    for (const auto &u : _userList)
+      if (u->getUserName() == user.getUserName())
+	break;
+    _userList.push_back(&user);
+    this->notify();
+  }
+
   void	setUsername(std::string &&userName) 
   {
     _userName = userName;

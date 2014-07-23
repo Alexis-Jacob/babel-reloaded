@@ -20,73 +20,19 @@ private:
     ar & _userList;
   }
 
-  
-public:
-  DataBase(std::string && name) : _name(name)
-  { 
-  }
-  
+  DataBase(std::string name) : _name(name){}
   DataBase(){}
 
-  ~DataBase()
-  {
-  }
-
-  virtual void update()
-  {
-    //std::cout << "Changement chez un utilisateur" << std::endl;
-    //sauver la bdd
-  }
-
-  void	addUser(User &user)
-  {
-    for (const auto &u : _userList)
-      if (u->getUserName() == user.getUserName())
-	break;
-    _userList.push_back(&user);
-    user.addObserver(this);
-    update();
-  }
-
-  void	save()
-  {
-    std::ofstream os(_name);
-    boost::archive::text_oarchive oa(os);
-
-    oa << *this;
-    os.close();
-  }
-
-  void	load()
-  {
-    std::ifstream is(_name);
-    boost::archive::text_iarchive ia(is);
-    
-    ia >> *this;
-    is.close();
- }
-
-  void	removeUser(User &user)
-  {
-    for (auto it = _userList.begin();it != _userList.end();++it)
-      {
-	if ((*it)->getUserName() == user.getUserName())
-	  {
-	    _userList.erase(it);
-	    break;
-	  }
-      }
-    save();
-  }
-
-  void displayUser() const
-  {
-    for (const auto & user : _userList)
-      {
-	std::cout << *user << std::endl;
-      }
-  }
-
+public:
+  static DataBase *getDataBase();
+  static DataBase *getDataBase(std::string name);
+  ~DataBase();
+  virtual void update();
+  void	addUser(User &user);
+  void	save(); //const ? 
+  void	load(); 
+  void	removeUser(User &user);
+  void displayUser() const;
 };
 
 #endif
