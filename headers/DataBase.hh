@@ -37,6 +37,7 @@ public:
   void	removeUser(User &user);
   void	displayUser() const;
   void	save() const;
+  User	*getUser(int id);
 };
 
 #endif

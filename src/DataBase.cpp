@@ -79,6 +79,13 @@ void DataBase::displayUser() const
     }
 }
 
+User *DataBase::getUser(int id)
+{
+  for (auto user : _userList)
+    if (user->getId() == id)
+      return user;
+  return nullptr;
+}
 
 int main() {
   DataBase::getDataBase("Filename");
