@@ -47,19 +47,19 @@ public:
   int   getId() const;
   bool	isBan() const;
 
-  void	addUser(User &user);
-  void	setUsername(std::string &&userName);
+  bool	addFriend(User &user);
+  void	setUserName(std::string &&userName);
   void	setMessage(std::string &&message);
   void	setIp(std::string &&ip);
   void	removeUser(User &user);
 
   friend std::ostream& operator<< (std::ostream &out, const User & user)
   {
-    out << user._userName << " " << user._message << " " << user._ip << ":" << std::endl;
+    out << "id:" << user._id << " " << user._userName << " " << user._message << " " << user._ip << ":" << std::endl;
     if (user._userList.size() > 0)
       {
 	for (const auto &u : user._userList)
-	  std::cout << u->getUserName() << " ";
+	  std::cout << "\t-" << u->getUserName() << std::endl;
 	std::cout << std::endl;
       }
     else

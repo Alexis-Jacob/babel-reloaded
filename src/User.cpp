@@ -6,20 +6,23 @@ const std::string &User::getIp() const		{ return _ip;}
 int   User::getId() const { return _id;}
 bool  User::isBan() const { return _ban;}
 
-void	User::addUser(User &user)
+bool	User::addFriend(User &user)
 {
+  if (user.getId() == _id)
+    return false;
   for (const auto &u : _userList)
-    if (u->getUserName() == user.getUserName())
-      break;
+    if (u->getId() == user.getId())
+      return false;
   _userList.push_back(&user);
   this->notify();
+  return true;
 }
 
-void	User::setUsername(std::string &&userName) 
+void	User::setUserName(std::string &&userName) 
 {
   _userName = userName;
   this->notify();
-  }
+}
 
 void	User::setMessage(std::string &&message) 
 {

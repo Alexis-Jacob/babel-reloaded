@@ -24,8 +24,9 @@ DataBase *DataBase::getDataBase(std::string name)
 
 void DataBase::update()
 {
-  //std::cout << "Changement chez un utilisateur" << std::endl;
-  //sauver la bdd
+#ifdef _DEBUG
+  std::cout << "Changement chez un utilisateur" << std::endl;
+#endif
 }
 
 bool	DataBase::addUser(std::string userName)
@@ -52,9 +53,12 @@ void	DataBase::save() const
 void	DataBase::load()
   {
     std::ifstream is(_name);
-    boost::archive::text_iarchive ia(is);
-    
-    ia >> *this;
+    try
+      {
+	boost::archive::text_iarchive ia(is);
+        ia >> *this;
+      }
+    catch (boost::archive::archive_exception){}
     is.close();
   }
 
@@ -87,27 +91,59 @@ User *DataBase::getUser(int id)
   return nullptr;
 }
 
-int main() {
-  DataBase::getDataBase("Filename");
-  // User	user(std::string("Alexis"));
-  // User	user2(std::string("Tom"));
+bool testDb() {
 
-  
-  // user.addUser(user2);
+  std::cout << "######" << std::endl << "Debut test DB" << std::endl;
 
-  // DataBase	db("filename");
-  
-  // db.addUser(user);
-  // db.addUser(user2);
-  
-  // user.addUser(user2);
+  DataBase *db = DataBase::getDataBase("filename"); //init singleton
+  if (db == nullptr)
+    {
+      std::cerr << "Error nullptr singleton" << std::endl;
+      return false;
+    }
+  db->addUser("Alexis") && db->addUser("user1");
 
-  // db.save();
+  User *user1 = db->getUser(1);
+  User *user0 = db->getUser(0);
   
-  // DataBase     db2("filename");
+  if (user1 == nullptr || user0 == nullptr)
+    {
+      std::cerr << "Error getUser" << std::endl;
+      return false;
+    }
+
+  user1->setIp("127.0.0.1");
+  if (user1->getIp() != "127.0.0.1")
+    {
+      std::cerr << "Error get/set ip" << std::endl;
+      return false;
+    }
+
+  user1->setMessage("message test");
+  if (user1->getMessage() != "message test")
+    {
+      std::cerr << "Error get/set message" << std::endl;
+      return false;
+    }
+
+
+  user1->setUserName("UserName test");
+  if (user1->getUserName() != "UserName test")
+    {
+      std::cerr << "Error get/set UserName" << std::endl;
+      return false;
+    }
+
+  user0->addFriend(*user1);
+
+  db->save();
+  db->displayUser();
   
-  // db2.load();
-  // db2.displayUser();
-  
+  std::cout << "DB ok!" << std::endl << "######" << std::endl;
   return 0;
+}
+
+int	main()
+{
+  testDb();
 }
