@@ -7,13 +7,18 @@
 #include <iostream>
 #include "Observer.hh"
 
+class	DataBase;
+
 class User : public Observable
 {
 private:
   friend class boost::serialization::access;
-  std::list<User* > _userList;  
-  std::string	_ip;
+  friend class Database;
+  std::list<User* > _userList;
+  bool		_ban;
+  int		_id;
   std::string	_userName;
+  std::string	_ip;
   std::string	_message;
   //img
 
@@ -25,60 +30,28 @@ private:
     ar & _userName;
     ar & _message;
     ar & _ip;
+    ar & _id;
   }
   
 public:
-  User(std::string &&userName): _userName(userName)
+  User(){}
+  User(int id, std::string userName): _ban(false), _id(id), _userName(userName)
   {
     _message = "";
     _ip = "0.0.0.0";
   }
-  
-  const std::string &getMessage() { return _message;}
-  const std::string &getUserName(){ return _userName;}
-  const std::string &getIp(){ return _ip;}
 
-  void	addUser(User &user)
-  {
-    for (const auto &u : _userList)
-      if (u->getUserName() == user.getUserName())
-	break;
-    _userList.push_back(&user);
-    this->notify();
-  }
+  const std::string &getMessage() const;
+  const std::string &getUserName() const;
+  const std::string &getIp() const;
+  int   getId() const;
+  bool	isBan() const;
 
-  void	setUsername(std::string &&userName) 
-  {
-    _userName = userName;
-    this->notify();
-  }
-  
-  void	setMessage(std::string &&message) 
-  {
-    _message = message;
-    this->notify();
-  }
-  
-  void	setIp(std::string &&ip)
-  {
-    _ip = ip;
-    this->notify();
-  }
-  
-  void	removeUser(User &user)
-  {
-    for (auto it = _userList.begin();it != _userList.end();++it)
-      {
-	if ((*it)->getUserName() == user.getUserName())
-	  {
-	    _userList.erase(it);
-	    this->notify();
-	    break;
-	  }
-      }
-  }
-
-  User(){}
+  void	addUser(User &user);
+  void	setUsername(std::string &&userName);
+  void	setMessage(std::string &&message);
+  void	setIp(std::string &&ip);
+  void	removeUser(User &user);
 
   friend std::ostream& operator<< (std::ostream &out, const User & user)
   {
@@ -95,14 +68,5 @@ public:
   }
 
 };
-  
-
-
-
-
-
-
-
-
 
 #endif

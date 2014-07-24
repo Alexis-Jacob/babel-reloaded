@@ -21,10 +21,6 @@ DataBase *DataBase::getDataBase(std::string name)
     databasePtr = new DataBase(name);
   return databasePtr;
 }
-  
-DataBase::~DataBase()
-{
-}
 
 void DataBase::update()
 {
@@ -32,17 +28,19 @@ void DataBase::update()
   //sauver la bdd
 }
 
-void	DataBase::addUser(User &user)
+bool	DataBase::addUser(std::string userName)
 {
   for (const auto &u : _userList)
-    if (u->getUserName() == user.getUserName())
-      break;
-  _userList.push_back(&user);
-  user.addObserver(this);
+    if (u->getUserName() == userName)
+      return false;
+  User *user = new User(_userCount++, userName);
+  _userList.push_back(user);
+  user->addObserver(this);
   update();
+  return true;
 }
 
-void	DataBase::save()
+void	DataBase::save() const 
 {
   std::ofstream os(_name);
   boost::archive::text_oarchive oa(os);
@@ -83,7 +81,7 @@ void DataBase::displayUser() const
 
 
 int main() {
-  DataBase::getDataBase();
+  DataBase::getDataBase("Filename");
   // User	user(std::string("Alexis"));
   // User	user2(std::string("Tom"));
 
