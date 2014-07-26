@@ -16,7 +16,7 @@ private:
   friend class Database;
   std::list<User* > _userList;
   bool		_ban;
-  int		_id;
+  unsigned int	_id;
   std::string	_userName;
   std::string	_ip;
   std::string	_message;
@@ -44,7 +44,7 @@ public:
   const std::string &getMessage() const;
   const std::string &getUserName() const;
   const std::string &getIp() const;
-  int   getId() const;
+  unsigned int	    getId() const;
   bool	isBan() const;
 
   bool	addFriend(User &user);

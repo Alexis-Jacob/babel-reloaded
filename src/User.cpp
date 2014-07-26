@@ -3,7 +3,7 @@
 const std::string &User::getMessage() const	{ return _message;}
 const std::string &User::getUserName() const	{ return _userName;}
 const std::string &User::getIp() const		{ return _ip;}
-int   User::getId() const { return _id;}
+unsigned int	  User::getId() const		{ return _id;}
 bool  User::isBan() const { return _ban;}
 
 bool	User::addFriend(User &user)

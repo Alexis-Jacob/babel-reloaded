@@ -12,7 +12,7 @@ private:
   friend class boost::serialization::access;
   std::list<User*>	_userList;
   std::string		_name;
-  unsigned int		_userCount;
+  unsigned int		_maxId;
 
   template<class Archive>
   void serialize(Archive & ar, const unsigned int version)
@@ -21,10 +21,12 @@ private:
     ar & _userList;
   }
 
-  DataBase(std::string name) : _name(name)
+  DataBase(std::string name) : _name(name), _maxId(0)
   {
-    load();
-    _userCount = _userList.size();
+    load();  
+    for (const auto & user : _userList)
+      if (user->getId() > _maxId)
+	_maxId = user->getId();
   }
 
 public:
@@ -35,9 +37,10 @@ public:
   bool	addUser(std::string userName);
   void	load(); 
   void	removeUser(User &user);
+  void	removeUser(unsigned int id);
   void	displayUser() const;
   void	save() const;
-  User	*getUser(int id);
+  User	*getUser(unsigned int id);
 };
 
 #endif

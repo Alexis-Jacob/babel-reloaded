@@ -34,7 +34,7 @@ bool	DataBase::addUser(std::string userName)
   for (const auto &u : _userList)
     if (u->getUserName() == userName)
       return false;
-  User *user = new User(_userCount++, userName);
+  User *user = new User(_maxId++, userName);
   _userList.push_back(user);
   user->addObserver(this);
   update();
@@ -75,6 +75,20 @@ void	DataBase::removeUser(User &user)
   save();
 }
 
+void	DataBase::removeUser(unsigned int id)
+{
+  for (auto it = _userList.begin();it != _userList.end();++it)
+    {
+      if ((*it)->getId() == id)
+	{
+	  _userList.erase(it);
+	  break;
+	}
+    }
+  save();
+}
+
+
 void DataBase::displayUser() const
 {
   for (const auto & user : _userList)
@@ -83,7 +97,7 @@ void DataBase::displayUser() const
     }
 }
 
-User *DataBase::getUser(int id)
+User *DataBase::getUser(unsigned int id)
 {
   for (auto user : _userList)
     if (user->getId() == id)
