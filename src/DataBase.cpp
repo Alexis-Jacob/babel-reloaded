@@ -161,7 +161,7 @@ bool testDb() {
   return 0;
 }
 
-int	main()
-{
-  testDb();
-}
+// int	main()
+// {
+//   testDb();
+// }
