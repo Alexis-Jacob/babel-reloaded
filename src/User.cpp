@@ -6,6 +6,11 @@ const std::string &User::getIp() const		{ return _ip;}
 unsigned int	  User::getId() const		{ return _id;}
 bool  User::isBan() const { return _ban;}
 
+bool	User::checkPassword(std::string password) const
+{
+  return (Utils::stringToPassword(password) == _password);
+}
+
 bool	User::addFriend(User &user)
 {
   if (user.getId() == _id)
@@ -34,6 +39,16 @@ void	User::setIp(std::string &&ip)
 {
   _ip = ip;
   this->notify();
+}
+
+bool	User::changePassword(std::string oldpassword, std::string newpassword)
+{
+  if (Utils::stringToPassword(oldpassword) == _password)
+    {
+      _password = Utils::stringToPassword(newpassword);
+      return true;
+    }
+  return false;
 }
 
 void	User::removeUser(User &user)

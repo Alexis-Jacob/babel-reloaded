@@ -34,7 +34,7 @@ public:
   static DataBase *getDataBase(std::string name);
   ~DataBase(){}
   virtual void update();
-  bool	addUser(std::string userName);
+  bool	addUser(std::string userName, std::string password);
   void	load(); 
   void	removeUser(User &user);
   void	removeUser(unsigned int id);

@@ -31,6 +31,7 @@ all	:	$(NAME)
 
 clean	:
 		$(RM) *.o *~ \#*\# src/*.o
+		rm `find . -name "*~"`
 
 fclean	:	clean
 		$(RM) $(NAME)

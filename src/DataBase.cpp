@@ -29,12 +29,12 @@ void DataBase::update()
 #endif
 }
 
-bool	DataBase::addUser(std::string userName)
+bool	DataBase::addUser(std::string userName, std::string password)
 {
   for (const auto &u : _userList)
     if (u->getUserName() == userName)
       return false;
-  User *user = new User(_maxId++, userName);
+  User *user = new User(_maxId++, userName, password);
   _userList.push_back(user);
   user->addObserver(this);
   update();
@@ -115,7 +115,7 @@ bool testDb() {
       std::cerr << "Error nullptr singleton" << std::endl;
       return false;
     }
-  db->addUser("Alexis") && db->addUser("user1");
+  db->addUser("Alexis", "alexis06") && db->addUser("user1", "password");
 
   User *user1 = db->getUser(1);
   User *user0 = db->getUser(0);
@@ -149,6 +149,10 @@ bool testDb() {
     }
 
   user0->addFriend(*user1);
+
+  std::cout << user0->checkPassword("alexis06") << std::endl;
+  std::cout << user0->checkPassword("password") << std::endl;
+  std::cout << user0->getUserName() << std::endl;
 
   db->save();
   db->displayUser();
